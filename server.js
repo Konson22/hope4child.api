@@ -7,7 +7,7 @@ const childrenRoute = require('./roues/children')
 const app = express();
 
 app.use(bodyParser.json());
-app.use(cors({origin: ['http://localhost:3000'], methods: ["GET", "POST"], credentials: true }));
+app.use(cors({origin: ['http://localhost:3000', 'https://hope4child.onrender.com'], methods: ["GET", "POST"], credentials: true }));
 app.use(cookieParser())
 
 app.use(express.static('public'));
