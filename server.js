@@ -3,7 +3,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
-const childrenRoute = require('./roues/children')
+const childrenRoute = require('./roues/children');
+const loginRoute = require('./roues/auth');
 const app = express();
 
 app.use(bodyParser.json());
@@ -12,7 +13,8 @@ app.use(cookieParser())
 
 app.use(express.static('public'));
 
-app.use('/children', childrenRoute)
+app.use('/auth', loginRoute);
+app.use('/children', childrenRoute);
 
 const PORT = process.env.PORT || 3001
 

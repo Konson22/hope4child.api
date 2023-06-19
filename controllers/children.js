@@ -4,7 +4,6 @@ const db = new sqlite.Database("./database.db", sqlite.OPEN_READWRITE, err => er
 let sql;
 
 
-
 const getAllChildrenController = (req, res) => {
     try{
         db.all('SELECT * FROM children', [], (err, rows) => {
@@ -44,7 +43,7 @@ module.exports = { getAllChildrenController, registerChild }
 //         address:'New site, near bilpam',
 //         bio:'progress, street children are at risk of being left behind. The numerous societal, practical and health barriers street children face means they are among the millions of the world’s hardest-to-reach',
 //         parent_contact:'0925658564',
-//         image:'/images/image.png'
+//         image:'/images/child-1.jpg'
 //     },
 //     {
 //         name:'James Dut',
@@ -54,7 +53,7 @@ module.exports = { getAllChildrenController, registerChild }
 //         address:'Gudele block 2',
 //         bio:'progress, street children are at risk of being left behind. The numerous societal, practical and health barriers street children face means they are among the millions of the world’s hardest-to-reach',
 //         parent_contact:'0925658564',
-//         image:'/images/image-1.png'
+//         image:'/images/child-7.jpg'
 //     },
 //     {
 //         name:'Sarah Ali',
@@ -64,7 +63,7 @@ module.exports = { getAllChildrenController, registerChild }
 //         address:'Gumbo, next to Bus station',
 //         bio:'progress, street children are at risk of being left behind. The numerous societal, practical and health barriers street children face means they are among the millions of the world’s hardest-to-reach children who are unable to attend',
 //         parent_contact:'0925658564',
-//         image:'/images/image-2.png'
+//         image:'/images/child-2.jpg'
 //     },
 //     {
 //         name:'Aliza Musa',
@@ -73,7 +72,7 @@ module.exports = { getAllChildrenController, registerChild }
 //         address:'Suk Zero',
 //         bio:'progress, street children are at risk of being left behind. The numerous societal, practical and health barriers street children face means they are among the millions of the world’s hardest-to-reach',
 //         parent_contact:'0925658564',
-//         image:'/images/image-3.png'
+//         image:'/images/child-4.jpg'
 //     },
 //     {
 //         name:'Samuel Ladu',
@@ -83,7 +82,7 @@ module.exports = { getAllChildrenController, registerChild }
 //         address:'Gumbo, next to Bus station',
 //         bio:'progress, street children are at risk of being left behind. The numerous societal, practical and health barriers street children face means they are among the millions of the world’s hardest-to-reach children who are unable to attend',
 //         parent_contact:'0925658564',
-//         image:'/images/image-5.png'
+//         image:'/images/child-5.jpg'
 //     },
 //     {
 //         name:'Santion Bulis',
@@ -93,7 +92,7 @@ module.exports = { getAllChildrenController, registerChild }
 //         address:'Gumbo, next to Bus station',
 //         bio:'progress, street children are at risk of being left behind. The numerous societal, practical and health barriers street children face means they are among the millions of the world’s hardest-to-reach children who are unable to attend',
 //         parent_contact:'0925658564',
-//         image:'/images/image-10.png'
+//         image:'/images/child-6.jpg'
 //     },
 // ]
 
