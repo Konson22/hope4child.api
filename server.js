@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
-const childrenRoute = require('./roues/children');
+const usersRoute = require('./roues/users');
 const loginRoute = require('./roues/auth');
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(cookieParser())
 app.use(express.static('public'));
 
 app.use('/auth', loginRoute);
-app.use('/children', childrenRoute);
+app.use('/users', usersRoute);
 
 const PORT = process.env.PORT || 3001
 
