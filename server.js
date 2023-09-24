@@ -8,7 +8,7 @@ const loginRoute = require('./roues/auth');
 const app = express();
 
 app.use(bodyParser.json());
-app.use(cors({origin: ['http://localhost:3000', 'https://hope4child.onrender.com'], methods: ["GET", "POST"], credentials: true }));
+app.use(cors({origin: ['https://skillfinder-a9cp.onrender.com/', 'http://localhost:3000', 'https://hope4child.onrender.com'], methods: ["GET", "POST"], credentials: true }));
 app.use(cookieParser())
 
 app.use(express.static('public'));
