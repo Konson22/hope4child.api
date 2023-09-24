@@ -52,11 +52,18 @@ const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
-        const hashPass = await bcryptjs.hash(password, 4)
-        sql = 'INSERT INTO users(name, email, password, image) VALUES(?,?,?,?)'
-        db.run(sql, [name, email, hashPass, `/uploads/Image.png`], err => {
-            if(err) throw err
-            res.json({id:1, name, image:`/uploads/Image.png`});
+        db.get(`SELECT * FROM users WHERE email='${email}'`, async (err, user) => {
+            if(err) throw err;
+            if(user){
+                res.status(409).send('Already registered!')
+            }else{
+                const hashPass = await bcryptjs.hash(password, 4)
+                sql = 'INSERT INTO users(name, email, password, image) VALUES(?,?,?,?)'
+                db.run(sql, [name, email, hashPass, `/uploads/Image.png`], err => {
+                    if(err) throw err
+                    res.json({id:1, name, image:`/uploads/Image.png`});
+                })
+            }
         })
     } catch (error) {
      console.log(error)   
