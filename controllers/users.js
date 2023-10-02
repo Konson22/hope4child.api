@@ -1,28 +1,18 @@
 const sqlite = require('sqlite3').verbose();
 const bcryptjs = require('bcryptjs');
-const { createToken } = require('../functions/jwt');
 const jwt = require('jsonwebtoken');
+const { createToken } = require('../midlewares/jwt');
 require('dotenv').config();
 
 
 const db = new sqlite.Database("./database.db", sqlite.OPEN_READWRITE, err => err && console.log(err));
 
 
-const verfiyToken = async (req, res) => {
-    const authorization = req.headers.authorization;
-
-    if(authorization){
-        const token = authorization.split(' ')[1]
-        try {
-            jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
-                if(err){
-                    return res.status(409).send('invalid token');
-                } 
-                res.json({user});
-            })
-        } catch (error) {
-            res.status(500).send('Internal Server Error');
-        }
+const authUser = async (req, res) => {
+    try{
+        res.json(req.user)
+    }catch(error){
+        res.status(404).send(error)
     }
 }
 
@@ -37,9 +27,16 @@ const loginUser = (req, res) => {
             if(!verified){
                 return res.status(409).send('Wrong Password!')
             }
-            const ACCESS_TOKEN = await createToken({id:user.id, name:user.name, profile_image:user.profile_image});
+            const userCredentials = {id:user.id, name:user.name, profile_image:user.profile_image}
+            const ACCESS_TOKEN = await createToken(userCredentials);
+            res.cookie('ACCESS_TOKEN', ACCESS_TOKEN, {
+                expires: new Date(Date.now() + (3600 * 1000 * 24 * 180 * 1)),
+                httpOnly: true,
+                sameSite: "none",
+                secure: 'false',
+            });
             res.json({
-                user:{id:user.id, name:user.name, profile_image:user.profile_image},
+                user:userCredentials,
                 ACCESS_TOKEN
             })
         })
@@ -60,9 +57,9 @@ const registerUser = async (req, res) => {
             }else{
                 const hashPass = await bcryptjs.hash(password, 4)
                 sql = 'INSERT INTO users(name, email, password, profile_image) VALUES(?,?,?,?)'
-                db.run(sql, [name, email, hashPass, `/user.png`], err => {
+                db.run(sql, [name, email, hashPass, 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png'], err => {
                     if(err) throw err
-                    res.json({id:1, name, profile_image:`/user.png`});
+                    res.json({id:1, name, profile_image:'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png'});
                 })
             }
         })
@@ -118,6 +115,6 @@ module.exports = {
     getFreelancersController, 
     registerUser, 
     createResume,
-    verfiyToken,
+    authUser,
     loginUser
 }

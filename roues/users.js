@@ -6,12 +6,13 @@ const {
     registerUser, 
     createResume, 
     getFreelancersController,
-    verfiyToken,
+    authUser,
     loginUser
 } = require('../controllers/users');
+const { verifyToken } = require('../midlewares/jwt');
 
 router.get('/', getAllUsersController);
-router.post('/auth', verfiyToken);
+router.post('/auth', verifyToken, authUser);
 router.post('/auth/login', loginUser);
 router.post('/register', registerUser);
 router.get('/freelancers', getFreelancersController);
