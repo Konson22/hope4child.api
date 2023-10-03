@@ -16,7 +16,7 @@ const authUser = async (req, res) => {
     }
 }
 
-
+// LOGIN USER
 const loginUser = (req, res) => {
     try {
         const { email, password } = req.body;
@@ -27,7 +27,7 @@ const loginUser = (req, res) => {
             if(!verified){
                 return res.status(409).send('Wrong Password!')
             }
-            const userCredentials = {id:user.id, name:user.name, profile_image:user.profile_image}
+            const userCredentials = {id:user.id, name:user.name, email:user.email, profile_image:user.profile_image}
             const ACCESS_TOKEN = await createToken(userCredentials);
             res.cookie('ACCESS_TOKEN', ACCESS_TOKEN, {
                 expires: new Date(Date.now() + (3600 * 1000 * 24 * 180 * 1)),
@@ -55,11 +55,20 @@ const registerUser = async (req, res) => {
             if(user){
                 res.status(409).send('Already registered!')
             }else{
+                const profleImage = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png'
                 const hashPass = await bcryptjs.hash(password, 4)
                 sql = 'INSERT INTO users(name, email, password, profile_image) VALUES(?,?,?,?)'
-                db.run(sql, [name, email, hashPass, 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png'], err => {
+                db.run(sql, [name, email, hashPass, profleImage], async err => {
                     if(err) throw err
-                    res.json({id:1, name, profile_image:'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png'});
+                    const userCredentials = {id:Date.now(), name, email, profile_image:profleImage}
+                    const ACCESS_TOKEN = await createToken(userCredentials);
+                    res.cookie('ACCESS_TOKEN', ACCESS_TOKEN, {
+                        expires: new Date(Date.now() + (3600 * 1000 * 24 * 180 * 1)),
+                        httpOnly: true,
+                        sameSite: "none",
+                        secure: 'false',
+                    });
+                    res.json(userCredentials)
                 })
             }
         })
@@ -81,40 +90,10 @@ const getAllUsersController = (req, res) => {
     }
 }
 
-// GET ALL RESUMEIS
-const getFreelancersController = (req, res) => {
-    try{
-        db.all('SELECT * FROM freelancers', [], (err, rows) => {
-            if(err) throw err;
-            res.json(rows)
-        })
-
-    }catch(error){
-        console.log(error)
-    }
-}
-
-// CREATE RESUME
-const createResume = async (req, res) => {
-    try {
-        const { name, profession, state, address, bio, insitute, college, start_year, end_year, profile_image } = req.body;
-        sql = 'INSERT INTO freelancers(name, profession, state, address, bio, insitute, college, start_year, end_year, profile_image, resume_link) VALUES(?,?,?,?,?,?,?,?,?,?,?)'
-        db.run(sql, [name, profession, state, address, bio, insitute, college, start_year, end_year, profile_image, null], err => {
-            if(err) throw err
-            res.json({message:'done'});
-        })
-    } catch (error) {
-        res.send('Error')
-     console.log(error)   
-    }
-}
-
 
 module.exports = { 
     getAllUsersController, 
-    getFreelancersController, 
     registerUser, 
-    createResume,
     authUser,
-    loginUser
+    loginUser,
 }
