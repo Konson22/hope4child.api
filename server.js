@@ -4,7 +4,11 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const usersRoute = require('./roues/auth');
 const resumeRoute = require('./roues/resume');
+const fileUpload = require('express-fileupload');
+
+
 const app = express();
+app.use(fileUpload());
 
 app.use(bodyParser.json());
 app.use(cors({origin: ['https://skillfinder-a9cp.onrender.com/', 'http://localhost:3000'], methods: ["GET", "POST"], credentials: true }));
